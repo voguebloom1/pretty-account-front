@@ -1,0 +1,30 @@
+.account-list-box{
+    width: 300px;
+}
+
+.account-bot-header{
+    height: 50px;
+    text-align: center;
+    border: 1px solid #aeaeae;
+    border-bottom: none;
+    padding-top: 10px;
+}
+
+.account-bot-table{
+    border: 1px solid #aeaeae;
+}
+.account-bot-table th{
+    border: 1px solid #aeaeae;
+    text-align: center;
+    height: 30px;
+}
+
+.account-bot-table td{
+    border: 1px solid #aeaeae;
+    text-align: center;
+    height: 30px;
+}
+
+.account-list-box{
+    margin-right: 10px;
+}

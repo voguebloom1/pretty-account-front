@@ -1,0 +1,28 @@
+.account-date-row{
+    height: 90px;
+}
+
+.account-date-col{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.account-date-row-title{
+    font-size: 25px;
+}
+
+.account-income-contents{
+    margin-top: 10px;
+    width: 100%;
+}
+
+.account-income-contents-box{
+    display: flex;
+}
+
+.account-outcome-contents{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
