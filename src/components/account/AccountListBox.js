@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
+import { Button, Modal, Form, Table } from 'react-bootstrap';
 import uuidv1 from 'uuid/v1';
+import { MdModeEdit, MdDone } from "react-icons/md";
+import moment from 'moment';
+
 import './AccountListBox.css';
 
 class AccountListBox extends Component{
@@ -9,19 +12,27 @@ class AccountListBox extends Component{
         add_account_list : [],
         add_modal_show : false,
         new_item : {
-            date: "2010-01-01",
+            date: moment().format('YYYY-MM-DD'),
             name: "",
             price: 0
-        }
+        },
+        titleEditMode : false,
+        item : this.props.item
     }
 
 
     clickAddButton = (e) => {
-        this.setState({new_item : {
-            date: "2010-01-01",
-            name: "",
-            price: 0
-        },add_modal_show: true});
+        this.setState({add_modal_show: true});
+    }
+
+    clickTitleEditButton = (type) => {
+        if(type === false){
+            // 저장 버튼을 누르면 
+            this.setState({titleEditMode: type});
+        }else{
+            this.setState({title: this.props.item.category, titleEditMode: type});
+        }
+        
     }
 
     closeModal = () => {
@@ -35,6 +46,13 @@ class AccountListBox extends Component{
         this.setState({add_account_list, add_modal_show: false});
     }
 
+    handleInputChange = (e, type) => {
+
+        if(type === 0) {
+            this.setState({title: e.target.value});
+        }
+    }
+
     handleModalInputChange = (e, type) => {
         const {new_item} = this.state;
         if(type === 0) new_item.date = e.target.value;
@@ -45,15 +63,42 @@ class AccountListBox extends Component{
 
 
     render(){
+              
+        let {item, add_account_list} = this.state;
+        
+        // undefined 처리
+        if(item === undefined){
+            item = {
+                category: "",
+                items : []
+            }
+        }
 
-        const account_list = this.props.items;
-        const {add_account_list} = this.state;
 
         return (
         <>
             <div className="account-list-box">
-                <div className="account-bot-header">Header</div>
-                <table className="account-bot-table">
+                <div className="account-bot-header">
+                    { this.state.titleEditMode === false 
+                        ? <>
+                            <span>{item.category}</span>
+                            <i className="icon-edit">
+                                <MdModeEdit  
+                                onClick={(e) => this.clickTitleEditButton(true)}/>
+                            </i> 
+                          </>
+                        : <>
+                            <input className="text_center"
+                                onChange={(e) => this.handleInputChange(e, 0)} 
+                                value={this.state.title}/>
+                            <i className="icon-done">
+                                <MdDone
+                                onClick={()=> this.clickTitleEditButton(false)}
+                            /></i>
+                          </>
+                    }
+                </div>
+                <Table className="account-bot-table" striped>
                     <colgroup>
                         <col style={{width: "100px"}}/>
                         <col style={{width: "100px"}}/>
@@ -68,7 +113,7 @@ class AccountListBox extends Component{
                     </thead>
                     <tbody>
                         {
-                            account_list.map((account)=>
+                            item.items.map((account)=>
                                 <tr key={account.id}>
                                     <td>{account.date}</td>
                                     <td>{account.name}</td> 
@@ -86,13 +131,13 @@ class AccountListBox extends Component{
                             )
 
                         }
-                        <tr>
-                            <td className="account-button-area" colSpan="3">
-                                <Button onClick={this.clickAddButton}>+</Button>
-                            </td>
-                        </tr>
                     </tbody>
-                </table>
+                    
+                </Table>
+                <div className="account-button-area"> 
+                    <Button onClick={this.clickAddButton}>+</Button>            
+                </div>
+                
             </div>
             <Modal show={this.state.add_modal_show} onHide={this.closeModal} animation={false}>
                 <Modal.Header closeButton>

@@ -2,65 +2,109 @@ import React, {Component} from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import AccountTotalBox from '../account/AccountTotalBox';
 import AccountListBox from '../account/AccountListBox';
+import moment from 'moment';
 
 
 import './AccountTemplate.css';
+import MonthPicker from '../common/MonthPicker';
 
 class AccountTemplate extends Component{
 
   state = {
-    select_date : '2020-01',
-    account_income_list : [
-      {
-        category : '주수입',
-        items : [
-          {id : '1', date: '2010-01-01', name : '월급', price : '3000000'},
-          {id : '2', date: '2010-01-01', name : '보너스', price : '500000'},
-          {id : '3', date: '2010-01-01', name : '월세', price : '400000'},
-          {id : '4', date: '2010-01-01', name : '부업', price : '340000'},
-          {id : '5', date: '2010-01-01', name : '부업', price : '340000'},
-          {id : '6', date: '2010-01-01', name : '부업', price : '340000'},
-        ]
-      }
-    ],
-    account_outcome_list  : [
-      {
-        category : '지출',
-        items : [
-          {id : '1', date: '2010-01-01', name : '월급', price : '3000000'},
-          {id : '2', date: '2010-01-01', name : '보너스', price : '500000'},
-          {id : '3', date: '2010-01-01', name : '월세', price : '400000'},
-          {id : '4', date: '2010-01-01', name : '부업', price : '340000'},
-          {id : '5', date: '2010-01-01', name : '부업', price : '340000'},
-        ]
-      }
-    ]
+    select_date : moment().format('YYYY-MM'),
+    account_date_list : {
+      income_list : [
+        {
+          category : '주수입',
+          items : [
+            {id : '1', date: '2010-01-01', name : '월급', price : '3000000'},
+            {id : '2', date: '2010-01-01', name : '보너스', price : '500000'},
+            {id : '3', date: '2010-01-01', name : '월세', price : '400000'},
+            {id : '4', date: '2010-01-01', name : '부업', price : '340000'},
+            {id : '5', date: '2010-01-01', name : '부업', price : '340000'},
+            {id : '6', date: '2010-01-01', name : '부업', price : '340000'},
+          ]
+        }
+      ],
+      outcome_list  : [
+        {
+          category : '지출',
+          items : [
+            {id : '1', date: '2010-01-01', name : '월급', price : '3000000'},
+            {id : '2', date: '2010-01-01', name : '보너스', price : '500000'},
+            {id : '3', date: '2010-01-01', name : '월세', price : '400000'},
+            {id : '4', date: '2010-01-01', name : '부업', price : '340000'},
+            {id : '5', date: '2010-01-01', name : '부업', price : '340000'},
+          ]
+        }
+      ]
+    }
   }
 
-  clickAddCategoryButton = () => {
-    const {account_income_list} = this.state;
-    account_income_list.push(
-      {
-        category : '주수입',
-        items : [
-          {id : '1', date: '2010-01-01', name : '월급', price : '3000000'},
-          {id : '2', date: '2010-01-01', name : '보너스', price : '500000'},
-          {id : '3', date: '2010-01-01', name : '월세', price : '400000'},
-          {id : '4', date: '2010-01-01', name : '부업', price : '340000'},
-          {id : '5', date: '2010-01-01', name : '부업', price : '340000'},
-          {id : '6', date: '2010-01-01', name : '부업', price : '340000'},
-        ]
-      }
-    );
-    this.setState(account_income_list);
+  clickAddCategoryButton = (type, name) => {
+    const { account_date_list } = this.state;
+    let list = [], key = "";
+    switch(type){
+      case "income" : 
+        list = account_date_list.income_list;
+        key = "income_list";
+        break;
+      case "outcome" :
+        list = account_date_list.outcome_list;
+        key = "outcome_list";
+        break;
+      default:
+        break;
+    }
+    list.push( {category : name, items : []});
+
+    account_date_list[key] = list;
+
+    if(key !== ""){
+      // account info 등록
+      this.setState({account_date_list});
+    }
+  }
+
+
+  setStateAccountList = (type, i, item) => {
+    if(type === 'income'){
+      console.log(item);
+      // const { account_date_list } = this.state;
+      // account_date_list.income_list[i] = item;
+      // this.setState(account_date_list);
+    }
+
+
+  }
+
+  // 자식 컴포넌트에서 props 업데이트 할때 해당 함수로만 할 수 있게 함.
+  setStateByKeyAndValue = (key, value) => {
+    switch(key){
+      case 'select_date' :
+        this.handleChangeSelectDate(value);
+        break;
+      default:
+        this.setState({[key]:value});
+        break;
+    }
+  }
+
+  handleChangeSelectDate = (select_date) => {
+    // 로딩바 시전
+    // api 호출 해서 해당 날짜 정보를 가져온다.
+    const account_date_list = {
+      income_list: [],
+      outcome_list: []
+    }
+    // select_date 업데이트, 정보 업데이트 한다.
+    this.setState({ account_date_list ,select_date});
+    // 로딩바 제거
   }
 
   render(){
-
-    const left_arrow = '< ';
-    const right_arrow = ' >';
-
-    const { account_income_list, account_outcome_list } = this.state;
+    const {account_date_list} = this.state;
+    const { income_list , outcome_list } = account_date_list;
  
     return (
       <div className="account-template">
@@ -68,9 +112,10 @@ class AccountTemplate extends Component{
           <Row className="account-date-row">
             <Col lg className="account-date-col">
               <div className="account-date-row-title">
-                <span>{left_arrow}</span>
-                { this.state.select_date } 
-                <span>{right_arrow}</span>
+                <MonthPicker 
+                  setProps = {this.setStateByKeyAndValue}
+                  select_date = {this.state.select_date}
+                />
               </div>
             </Col>
           </Row>
@@ -79,35 +124,43 @@ class AccountTemplate extends Component{
               <AccountTotalBox/>
             </Col>
           </Row>
-          <Row>
-            <Col>
+          <Row className="account-contents">
+            <Col xs={12} className="ac-title">
               <span> 수입 </span>
-              <Button onClick={this.clickAddCategoryButton}>+</Button>
+              <Button onClick={(e)=>this.clickAddCategoryButton("income")}>+</Button>
             </Col>
-          </Row>
-          <Row className="account-income-contents">
-            <Col className="account-income-contents-box">
-              {account_income_list.map((item, i) => 
+            <Col xs={12} >
+              <div className="account-contents-boxs">
+              {income_list.map((item, i) => 
                 <AccountListBox
                   key = {i}
-                  title = {item.category}
-                  items = {item.items}
+                  id = {i}
+                  type="income"
+                  item = {item}
+                  setProps = {this.setStateAccountList}
                 />)}
+                { income_list.length === 0 && <span className="blank_box">수입 항목을 추가해주세요.</span>}
+              </div>
             </Col>
           </Row>
           <Row>
-            <Col>
-              <span> 지출 </span>
-            </Col>
+
           </Row>          
-          <Row className="account-outcome-contents">
+          <Row className="account-contents">
+            <Col xs={12} className="ac-title">
+              <span> 지출 </span>
+              <Button onClick={(e)=>this.clickAddCategoryButton("outcome")}>+</Button>
+            </Col>
             <Col>
-              {account_outcome_list.map((item, i) => 
+              <div className="account-contents-boxs">
+              {outcome_list.map((item, i) => 
                 <AccountListBox
                   key = {i}
                   title = {item.category}
                   items = {item.items}
                 />)}
+                { outcome_list.length === 0 && <span className="blank_box">지출 항목을 추가해주세요.</span>}
+              </div>
             </Col>
           </Row>
         </Container>

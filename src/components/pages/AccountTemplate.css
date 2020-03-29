@@ -10,19 +10,27 @@
 
 .account-date-row-title{
     font-size: 25px;
+    user-select: none;
 }
 
-.account-income-contents{
-    margin-top: 10px;
-    width: 100%;
+.account-contents{
+    margin-top: 20px;
 }
 
-.account-income-contents-box{
+.account-contents-boxs{
     display: flex;
+    flex-wrap: wrap;
+    padding: 10px 0px;
+    min-height: 300px;
+    border: 1px solid #aeaeae;
 }
 
-.account-outcome-contents{
-    margin-top: 10px;
-    margin-bottom: 10px;
-    width: 100%;
+.account-contents-boxs .blank_box{
+    flex: 1 1 auto;
+    text-align: center;
+    padding-top: 120px;
+}
+
+.ac-title{
+    height: 50px;  
 }

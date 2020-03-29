@@ -1,30 +1,54 @@
 .account-list-box{
-    width: 300px;
+    width: calc(33.33333% - 10px);
+    margin: 5px;
+    border: 1px solid #aeaeae;
 }
 
 .account-bot-header{
     height: 50px;
-    text-align: center;
-    border: 1px solid #aeaeae;
-    border-bottom: none;
-    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .account-bot-table{
-    border: 1px solid #aeaeae;
+    width: 100%;
+    border-bottom: 1px solid #efe5e5;
 }
 .account-bot-table th{
-    border: 1px solid #aeaeae;
+    /* border: 1px solid #aeaeae; */
     text-align: center;
     height: 30px;
 }
 
 .account-bot-table td{
-    border: 1px solid #aeaeae;
+    /* border: 1px solid #aeaeae; */
     text-align: center;
     height: 30px;
 }
 
-.account-list-box{
-    margin-right: 10px;
+.account-button-area{
+    text-align: center;
+    margin-bottom: 15px;
+    user-select: none;
+    outline: none;
+}
+
+.account-button-area button{
+    outline: none;
+}
+
+@media(max-width: 1024px){
+    .account-list-box{
+        width: calc(50% - 10px);
+        margin: 5px;
+    }
+
+}
+
+@media(max-width: 712px){
+    .account-list-box{
+        width: calc(100% - 10px);
+        margin: 5px;
+    }
 }
