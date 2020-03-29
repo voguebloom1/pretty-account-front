@@ -66,20 +66,16 @@ class AccountTemplate extends Component{
     }
   }
 
-
-  setStateAccountList = (type, i, item) => {
-    if(type === 'income'){
-      console.log(item);
-      // const { account_date_list } = this.state;
-      // account_date_list.income_list[i] = item;
-      // this.setState(account_date_list);
-    }
-
-
+  addIncomeListItem = (i, item) => {
+    const {account_date_list} = this.state;
+    // 여기에 api 호출 로직 필요
+    account_date_list.income_list[i] = item;
+    this.setState({account_date_list});
   }
 
+
   // 자식 컴포넌트에서 props 업데이트 할때 해당 함수로만 할 수 있게 함.
-  setStateByKeyAndValue = (key, value) => {
+  setStateByKeyAndValue = (key, value, i) => {
     switch(key){
       case 'select_date' :
         this.handleChangeSelectDate(value);
@@ -131,13 +127,11 @@ class AccountTemplate extends Component{
             </Col>
             <Col xs={12} >
               <div className="account-contents-boxs">
-              {income_list.map((item, i) => 
+                {income_list.map((item, i) => 
                 <AccountListBox
                   key = {i}
-                  id = {i}
-                  type="income"
                   item = {item}
-                  setProps = {this.setStateAccountList}
+                  addListItem = {this.addIncomeListItem}
                 />)}
                 { income_list.length === 0 && <span className="blank_box">수입 항목을 추가해주세요.</span>}
               </div>
@@ -156,8 +150,7 @@ class AccountTemplate extends Component{
               {outcome_list.map((item, i) => 
                 <AccountListBox
                   key = {i}
-                  title = {item.category}
-                  items = {item.items}
+                  item = {item}
                 />)}
                 { outcome_list.length === 0 && <span className="blank_box">지출 항목을 추가해주세요.</span>}
               </div>

@@ -9,7 +9,6 @@ import './AccountListBox.css';
 class AccountListBox extends Component{
 
     state = {
-        add_account_list : [],
         add_modal_show : false,
         new_item : {
             date: moment().format('YYYY-MM-DD'),
@@ -22,7 +21,12 @@ class AccountListBox extends Component{
 
 
     clickAddButton = (e) => {
-        this.setState({add_modal_show: true});
+        this.setState({new_item: {
+            id : ""+(this.state.item.items.length + 1),
+            date: moment().format('YYYY-MM-DD'),
+            name: "",
+            price: 0
+        }, add_modal_show: true});
     }
 
     clickTitleEditButton = (type) => {
@@ -40,10 +44,11 @@ class AccountListBox extends Component{
     }
 
     saveModal = () => {
-        const {new_item,add_account_list} = this.state;
-        new_item.id = uuidv1();
-        add_account_list.push(new_item);
-        this.setState({add_account_list, add_modal_show: false});
+        const {item, new_item} = this.state;
+        item.items.push(new_item);
+        this.props.addListItem(this.props.key, item);
+        this.setState({add_modal_show: false});
+        
     }
 
     handleInputChange = (e, type) => {
@@ -113,23 +118,13 @@ class AccountListBox extends Component{
                     </thead>
                     <tbody>
                         {
-                            item.items.map((account)=>
-                                <tr key={account.id}>
+                            item.items.map((account, i)=>
+                                <tr key={i}>
                                     <td>{account.date}</td>
                                     <td>{account.name}</td> 
                                     <td>{account.price}</td>         
                                 </tr>
                             )
-                        }
-                        {
-                            add_account_list.map((account)=>
-                                <tr key={account.id}>
-                                    <td>{account.date}</td>
-                                    <td>{account.name}</td> 
-                                    <td>{account.price}</td>         
-                                </tr>
-                            )
-
                         }
                     </tbody>
                     
